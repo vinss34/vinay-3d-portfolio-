@@ -5,14 +5,23 @@ import { useGLTF, OrbitControls, Float } from '@react-three/drei';
 import { motion } from 'framer-motion';
 
 function Model() {
-  const { scene } = useGLTF('/character.glb');
-  return <primitive object={scene} scale={2} position={[0, -1.5, 0]} />;
+  try {
+    const { scene } = useGLTF('/character.glb');
+    return <primitive object={scene} scale={2} position={[0, -1.5, 0]} />;
+  } catch (e) {
+    return (
+      <mesh position={[0, 0, 0]}>
+        <sphereGeometry args={[1.5, 32, 32]} />
+        <meshStandardMaterial color="#3b82f6" wireframe />
+      </mesh>
+    );
+  }
 }
 
 export default function App() {
   return (
     <div className="relative bg-slate-950 text-white min-h-screen font-sans selection:bg-blue-500 selection:text-white">
-      {/* Fixed 3D Canvas Background */}
+      {/* 3D Canvas */}
       <div className="fixed inset-0 z-0">
         <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>
           <ambientLight intensity={1.5} />
@@ -27,7 +36,7 @@ export default function App() {
         </Canvas>
       </div>
 
-      {/* Scrollable Story Overlay */}
+      {/* Content Overlay */}
       <div className="relative z-10">
         {/* Hero Section */}
         <section className="h-screen flex flex-col justify-center items-center text-center px-4">
