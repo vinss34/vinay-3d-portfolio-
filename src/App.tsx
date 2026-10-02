@@ -4,7 +4,7 @@ import { useGLTF, OrbitControls, Float } from '@react-three/drei';
 import { motion } from 'framer-motion';
 
 function Model() {
-  const { scene } = useGLTF('/character.glb');
+  const { scene } = useGLTF('/Rigged Astronaut by J-Toastie - 0oBRDJ9ZI9.glb');
   return <primitive object={scene} scale={2} position={[0, -1.5, 0]} />;
 }
 
