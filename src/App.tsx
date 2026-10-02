@@ -1,21 +1,35 @@
 // @ts-nocheck
-import React, { Suspense } from 'react';
+import React, { Suspense, Component } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useGLTF, OrbitControls, Float } from '@react-three/drei';
 import { motion } from 'framer-motion';
 
-function Model() {
-  try {
-    const { scene } = useGLTF('/character.glb');
-    return <primitive object={scene} scale={2} position={[0, -1.5, 0]} />;
-  } catch (e) {
-    return (
-      <mesh position={[0, 0, 0]}>
-        <sphereGeometry args={[1.5, 32, 32]} />
-        <meshStandardMaterial color="#3b82f6" wireframe />
-      </mesh>
-    );
+// Error Boundary to safely fallback if .glb fails or takes too long
+class ErrorBoundary extends Component {
+  state = { hasError: false };
+  static getDerivedStateFromError() {
+    return { hasError: true };
   }
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+    return this.props.children;
+  }
+}
+
+function AstronautModel() {
+  const { scene } = useGLTF('/character.glb');
+  return <primitive object={scene} scale={2} position={[0, -1.5, 0]} />;
+}
+
+function FallbackMesh() {
+  return (
+    <mesh position={[0, 0, 0]}>
+      <icosahedronGeometry args={[1.5, 2]} />
+      <meshStandardMaterial color="#60a5fa" wireframe />
+    </mesh>
+  );
 }
 
 export default function App() {
@@ -27,11 +41,15 @@ export default function App() {
           <ambientLight intensity={1.5} />
           <directionalLight position={[10, 10, 5]} intensity={2} />
           <pointLight position={[-10, -10, -10]} intensity={0.5} />
-          <Suspense fallback={null}>
-            <Float speed={1.8} rotationIntensity={0.4} floatIntensity={0.6}>
-              <Model />
-            </Float>
+          
+          <Suspense fallback={<FallbackMesh />}>
+            <ErrorBoundary fallback={<FallbackMesh />}>
+              <Float speed={1.8} rotationIntensity={0.4} floatIntensity={0.6}>
+                <AstronautModel />
+              </Float>
+            </ErrorBoundary>
           </Suspense>
+
           <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={1} />
         </Canvas>
       </div>
