@@ -3,8 +3,11 @@ import { Canvas } from '@react-three/fiber';
 import { useGLTF, OrbitControls, Float } from '@react-three/drei';
 import { motion } from 'framer-motion';
 
+// @ts-ignore
+import modelUrl from '../Rigged Astronaut by J-Toastie - 0oBRDJ9ZI9.glb?url';
+
 function Model() {
-  const { scene } = useGLTF('/Rigged Astronaut by J-Toastie - 0oBRDJ9ZI9.glb');
+  const { scene } = useGLTF(modelUrl);
   return <primitive object={scene} scale={2} position={[0, -1.5, 0]} />;
 }
 
