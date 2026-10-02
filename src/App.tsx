@@ -1,13 +1,11 @@
+// @ts-nocheck
 import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { useGLTF, OrbitControls, Float } from '@react-three/drei';
 import { motion } from 'framer-motion';
 
-// @ts-ignore
-import modelUrl from '../Rigged Astronaut by J-Toastie - 0oBRDJ9ZI9.glb?url';
-
 function Model() {
-  const { scene } = useGLTF(modelUrl);
+  const { scene } = useGLTF('/character.glb');
   return <primitive object={scene} scale={2} position={[0, -1.5, 0]} />;
 }
 
@@ -29,7 +27,7 @@ export default function App() {
         </Canvas>
       </div>
 
-      {/* Scrollable Story overlay */}
+      {/* Scrollable Story Overlay */}
       <div className="relative z-10">
         {/* Hero Section */}
         <section className="h-screen flex flex-col justify-center items-center text-center px-4">
@@ -105,7 +103,7 @@ export default function App() {
           </motion.div>
         </section>
 
-        {/* Footer & License Attribution */}
+        {/* Footer */}
         <footer className="py-8 text-center text-xs text-slate-500 relative z-20">
           Rigged Astronaut model by J-Toastie via Poly Pizza (CC-BY)
         </footer>
